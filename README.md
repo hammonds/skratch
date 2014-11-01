@@ -8,4 +8,6 @@ Create geometry and apply materials in Sketchup, export for processing in Radian
 
 Add the .rb and .html files to your Sketchup plugin directory and away you go.
 
+Also includes Sketchup materials. Diffuse materials of various reflectances and transparent materials of various transmittances.
+
 Tested in Sketchup 8, 2013, and 2014.
