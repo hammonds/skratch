@@ -1,0 +1,523 @@
+<html>
+<script>
+// Check for the various File API support.
+if (window.File && window.FileReader && window.FileList && window.Blob) {
+  // Great success! All the File APIs are supported.
+} else {
+  alert('The File APIs are not fully supported in this browser.');
+}
+
+	function renderCheck(someElementId) {
+		someElement = document.getElementById(someElementId)
+		if (someElement.value !== "") {
+			return "render= " + someElement.id + " " + someElement.value + " ";
+			}
+		}
+
+	function makeRIFfile() {
+		zone = document.getElementById("ZONE").value;
+		zone_string = "ZONE= " + zone + " " + bounding_box_string;
+		
+		exposure = document.getElementById("EXPOSURE").value;
+		exposure_string = "EXPOSURE= " + exposure + " ";
+		
+		res_v = document.getElementById("RESOLUTION_V").value;
+		res_h = document.getElementById("RESOLUTION_H").value;
+		res_string = "RESOLUTION= " + res_h + " " + res_v + " ";
+		
+		quality = document.getElementById("QUALITY").value;
+		quality_string = "QUALITY= " + quality + " ";
+		
+		penumbras = document.getElementById("PENUMBRAS").value;
+		penumbras_string = "PENUMBRAS= " + penumbras + " ";
+		
+		indirect = document.getElementById("INDIRECT").value;
+		indirect_string = "INDIRECT= " + indirect + " ";
+		
+		detail = document.getElementById("DETAIL").value;
+		detail_string = "DETAIL= " + detail + " ";
+		
+		variability = document.getElementById("VARIABILITY").value;
+		variability_string = "VARIABILITY= " + variability + " ";
+		
+		//rpict options
+		
+		irr_value = document.getElementById("-i").value;
+			if (irr_value == 1) {
+				irr = "render= -i "
+			} else {
+				irr = ""
+			}
+		
+		ps = renderCheck("-ps");
+		pt = renderCheck("-pt");
+		pj = renderCheck("-pj");
+		dj = renderCheck("-dj");
+		ds = renderCheck("-ds");
+		dt = renderCheck("-dt");
+		dc = renderCheck("-dc");
+		dr = renderCheck("-dr");
+		dp = renderCheck("-dp");
+		st = renderCheck("-st");
+		ab = renderCheck("-ab");
+		aa = renderCheck("-aa");
+		ar = renderCheck("-ar");
+		ad = renderCheck("-ad");
+		as = renderCheck("-as");
+		lr = renderCheck("-lr");
+		lw = renderCheck("-lw");
+		
+		//files
+		materials = document.getElementById("material_file").value;
+		material_file_string = "materials= " + materials + " ";
+		
+		geometry = document.getElementById("geometry_file").value;
+		geometry_file_string = "scene= " + geometry + " ";
+		
+		sky = document.getElementById("sky_file").value;
+		sky_file_string = "scene= " + sky + " ";
+		
+		view = document.getElementById("view_file").value;
+		view_file_string = "view= -vf " + view + " ";
+		
+		output = document.getElementById("output_file").value;
+		
+		final_string  = "skp:sendingRIFInfo@" + 
+			irr + "*" +
+			ps + "*" +
+			pt + "*" +
+			pj + "*" +
+			dj + "*" +
+			ds + "*" +
+			dt + "*" +
+			dc + "*" +
+			dr + "*" +
+			dp + "*" +
+			st + "*" +
+			ab + "*" +
+			aa + "*" +
+			ar + "*" +
+			ad + "*" +
+			as + "*" +
+			lr + "*" +
+			lw + "*" +
+			"UP= Z " + "*" +
+			zone_string + "*" +
+			exposure_string + "*" +
+			res_string + "*" +
+			quality_string + "*" +
+			penumbras_string + "*" +
+			indirect_string + "*" +
+			detail_string + "*" +
+			variability_string + "*" +
+			material_file_string + "*" +
+			geometry_file_string + "*" +
+			sky_file_string + "*" +
+			view_file_string + "*" +
+			"OCTREE= " + output + ".oct " + "*" +
+			"AMBFILE= " + output + ".amb " + "*" +
+			"OPTFILE= " + output + ".opt " + "*" +
+			"PICTURE= " + output + " " + "*" +
+			"REPORT = 0.1 ";			
+		to_skp = final_string;
+		window.location.href = to_skp;
+	}
+	
+	function getBoundingBox () {
+		to_skp = 'skp:getBoundingBox@refresh';
+		window.location.href = to_skp;
+	}
+	
+	bounding_box_string = "";
+	
+	function updateBoundingBox (xmin, xmax, ymin, ymax, zmin, zmax) {
+		bounding_box_string = xmin + " " + xmax + " " + ymin + " " + ymax + " " + zmin + " " + zmax + " ";
+		document.getElementById("xmin").innerHTML = xmin;
+		document.getElementById("xmax").innerHTML = xmax;
+		document.getElementById("ymin").innerHTML = ymin;
+		document.getElementById("ymax").innerHTML = ymax;
+		document.getElementById("zmin").innerHTML = zmin;
+		document.getElementById("zmax").innerHTML = zmax;
+	}
+</script>
+
+<body>
+	<form>
+		<p>
+		<button type = "button" onclick = "makeRIFfile()">Create .rif file</button>
+		</p>
+		<h3>Output</h3>
+		<p>
+		<b>Output file name</b><input type="text" id="output_file" />
+		</p>
+		<h3>Files</h3>
+		<p>
+		<b>Material file</b><input type="text" id="material_file" />
+		</p>
+		<p>
+		<b>Geometry file</b><input type="text" id="geometry_file" />
+		</p>
+		<b>Sky file</b><input type="text" id="sky_file" />
+		</p>
+		<p>
+		<b>View file</b><input type="text" id="view_file" />
+		</p>
+		<p>
+		<h3>.rif Options</h3>
+		<p>
+		<b>Resolution:</b> &nbsp;<i>(Default = 512x512)</i></br>
+		Vertical: &nbsp;
+		<input id="RESOLUTION_V" type = "text" size = 4>
+		Horizontal: &nbsp;
+		<input id="RESOLUTION_H" type = "text" size = 4>
+		</p>
+		<p>
+		<b>Quality: &nbsp;
+		<select id="QUALITY">
+			<option value="L">Low</option>
+			<option value="M">Medium</option>
+			<option value="H">High</option>
+		</select>
+		<p>
+		<b>Zone:</b> &nbsp;
+		<select id="ZONE">
+			<option value="I">Interior</option>
+			<option value="E">Exterior</option>
+		</p>
+		</select>
+		<p>
+		<b>Exposure:</b> &nbsp;
+		<input id="EXPOSURE" type = "text" size = 4>
+		<i>(Default: interior = 0.01, exterior = 10)</i>
+		<button onclick="getBoundingBox()">Get Bounding Box</button>
+		<p id="xmin">-</p>
+		<p id="xmax">-</p>
+		<p id="ymin">-</p>
+		<p id="ymax">-</p>
+		<p id="zmin">-</p>
+		<p id="zmax">-</p>
+		</p>
+		<p>
+		<b>Indirect reflections:</b> &nbsp;
+		<input id="INDIRECT" type = "text" size = 4>
+		</p>
+		<p>
+		<b>Level of visual detail:</b> &nbsp;
+		<select id="DETAIL">
+			<option value="L">Low</option>
+			<option value="M">Medium</option>
+			<option value="H">High</option>
+		</select>
+		</p>
+		<p>
+		<b>Variability of light:</b> &nbsp;
+		<select id="VARIABILITY">
+			<option value="L">Low</option>
+			<option value="M">Medium</option>
+			<option value="H">High</option>
+		</select>
+		</p>
+		<p>
+		<b>Penumbras:</b> &nbsp; 
+		<select id="PENUMBRAS">
+			<option value="F">No</option>
+			<option value="T">Yes</option>
+		</select>
+		<i>(No = hard shadows; Yes = soft shadows)</i>
+		</p>
+
+
+	<h3>RPICT Options</h3>
+	
+	<p>
+	<b>Image Type</b> &nbsp;
+	<select id="-i">
+		<option value=0>Radiance</option>
+		<option value=1>Irradiance</option>
+	</select>
+	</p>
+	
+	<p>
+	<b title="Specifies the sample spacing (in pixels) for adaptive subdivision on the image plane.">Pixel Sampling Rate</b> &nbsp;
+	<select id="-ps">
+		<option></option>
+		<option value = 16>Min. (16)</option>
+		<option value = 8>Fast (8)</option>
+		<option value = 4>Accurate (4)</option>
+		<option value = 16>Max. (1)</option>
+	</select><br/>
+	</br>
+	<i>If objects are missing pieces, decrease value by 50%</i></br>
+	<i>Halving value increases rendering time up to 4x</i>
+	</p>
+	
+	<p>
+	<b title="If two samples differ by more than this amount, a third sample is taken between them.">Sampling Threshold</b> &nbsp;
+	<select id="-pt">
+		<option></option>
+		<option value = 1>Min. (1)</option>
+		<option value = 0.15>Fast (0.15)</option>
+		<option value = 0.05>Accurate (0.05)</option>
+		<option value = 0>Max. (0)</option>
+	</select><br/>
+	</br>
+	<i>If some soft edges are very jagged, decrease value by 50%</i></br>
+	<i>Minor impact to rendering time</i>
+	</p>
+	
+	<p>
+	<b title="Distributed ray-tracing performs anti-aliasing by randomly sampling over pixels. A value of one will randomly distribute samples over full pixels. A value of zero samples pixel centers only.">Anti-aliasing jitter</b> &nbsp;
+	<select id="-pj">
+		<option></option>
+		<option value = 0>Min. (0)</option>
+		<option value = 0.6>Fast (0.6)</option>
+		<option value = 0.9>Accurate (0.9)</option>
+		<option value = 1>Max. (1)</option>
+	</select></br>
+	</br>
+	<i>If diagonal edges look like staircases, increase to 0.9</i></br>
+	<i>If edges look too erratic, decrease value to 0.4</i></br>
+	<i>No effect to rendering time</i>
+	</p>
+	
+	<p>
+	<b title="A value of zero samples each source at specific sample points (see the Source Substructuring option ), giving a smoother but somewhat less accurate rendering. A positive value causes rays to be distributed over each source sample according to its size, resulting in more accurate penumbras.">Source jitter</b> &nbsp;
+	<select id="-dj">
+		<option></option>
+		<option value = 0>Min. (0)</option>
+		<option value = 0>Fast (0)</option>
+		<option value = 0.7>Accurate (0.7)</option>
+		<option value = 1>Max. (1)</option>
+	</select></br>
+	</br>
+	<i>If using this option, set Pixel Sampling to 1</i></br>
+	<i>If shadows are unnaturally sharp, increase value to 0.7</i></br>
+	<i>Increasing value requires Pixel Sampling Rate to be reduced</i>
+	</p>
+	
+	<p>
+	<b title="A light source will be subdivided until the width of each sample area divided by the distance to the illuminated point is below this ratio. This assures accuracy in regions close to large area sources at a slight computational expense. A value of zero turns source subdivision off, sending at most one shadow ray to each light source.">Source Substructuring</b> &nbsp;
+	<select id="-ds">
+		<option></option>
+		<option value = 0>Min. (0) QUALITY = L</option>
+		<option value = 0.5>Fast (0.5)</option>
+		<option value = 0.3>QUALITY = M (0.3)</option>
+		<option value = 0.2>QUALITY = H (0.2)</option>
+		<option value = 0.15>Accurate (0.15)</option>
+		<option value = 0.02>Max. (0.02)</option>
+	</select></br>
+	Controlled by QUALITY.</br>
+	<i>If large sources cast unnatural shades, decrease value by 50%</i></br>
+	<i>Halving value doubles rendering time</i>
+	</p>
+	
+	<p>
+	<b title="Shadow testing will stop when the potential contribution of at least the next and at most all remaining light source samples is less than this fraction of the accumulated value (See the Direct Certainty option). The remaining light source contributions are approximated statistically. A value of zero means that all light source samples will be tested for shadow.">Direct Thresholding</b> &nbsp;
+	<select id="-dt">
+		<option></option>
+		<option value = 1>Min. (1)</option>
+		<option value = 0.5>Fast (0.5)</option>
+		<option value = 0.2>QUALITY = L (0.2)</option>
+		<option value = 0.1>QUALITY = M (0.1)</option>
+		<option value = 0.05>Accurate (0.05) QUALITY = H</option>
+		<option value = 0>Max. (0)*</option>
+	</select>*(Max. value disables optimization)</i></br>
+	Controlled by QUALITY.</br>
+	<i>If some shadows disappear, decrease value by 50%</i></br>
+	<i>Halving value increases rendering time 50%</i>
+	</p>
+	
+	<p>
+	<b title="A value of one guarantees that the absolute accuracy of the direct calculation will be equal to or better than that given in Direct Thresholding. A value of zero only insures that all shadow lines resulting in a contrast change greater than the Direct Thresholding value will be calculated.">Direct Certainty</b> &nbsp;
+	<select id="-dc">
+		<option></option>
+		<option value = 0>Min. (0)</option>
+		<option value = 0.25>Fast (0.25) QUALITY = L</option>
+		<option value = 0.5>Accurate (0.5) QUALITY = M</option>
+		<option value = 0.75>QUALITY = H (0.75)</option>
+		<option value = 1>Max. (1)</option>
+	</select></br>
+	Controlled by QUALITY.</br>
+	<i>If many light sources, increase value to 0.75, otherwise values will be inaccurate.</i></br>
+	<i>Increasing value affects rendering time up to 50%</i>
+	</p>
+	
+	<p>
+	<b title="A value of 0 means that secondary sources will be ignored. A value of 1 means that sources will be made into first generation secondary sources; a value of 2 means that first generation secondary sources will also be made into second generation secondary sources, and so on.">Direct Relays</b> &nbsp;
+	<select id="-dr">
+		<option></option>
+		<option value = 0>Min. (0) QUALITY = L</option>
+		<option value = 1>Fast (1) QUALITY = M</option>
+		<option value = 3>Accurate (3) QUALITY = H</option>
+		<option value = 6>Max. (6)</option>
+	</select></br>
+	Controlled by QUALITY.</br>
+	<i>If missing multiple mirror reflections, increment value</i></br>
+	<i>Each new reflection can double rendering time</i>
+	</p>
+	
+	<p>
+	<b title="This is the number of samples per steradian that will be used to determine ahead of time whether or not it is worth following shadow rays through all the reflections and/or transmissions associated with a secondary source path. A value of 0 means that the full secondary source path will always be tested for shadows if it is tested at all.">Direct Pretest Density</b> &nbsp;
+	<select id="-dp">
+		<option></option>
+		<option value = 32>Min. (32)</option>
+		<option value = 64>Fast (64)</option>
+		<option value = 512>Accurate (512)</option>
+		<option value = 0>Max. (0)*</option>
+	</select>*Max. value disables optimization)</i></br>
+	Controlled by DETAIL and QUALITY (varies from 64 for low to 4096 for high)</br>
+	<i>If mirror reflections are incorrect, double value</i>
+	<i>Minor impact to rendering time</i>
+	</p>
+	
+	<p>
+	<b title="">Specular Jitter - NOTE THIS IS CURRENTLY DISABLED DUE TO RAD ERRORS</b> &nbsp;
+	<select id="-sj">
+		<option></option>
+		<option value = 0>Min. (0)</option>
+		<option value = 0.3>Fast (0.3)</option>
+		<option value = 0.7>Accurate (0.7)</option>
+		<option value = 1>Max. (1)</option>
+	</select></br>
+	<i>If specular reflections are too fuzzy, decrease value to 0.2</i></br>
+	<i>If specular reflections are too sharp, increase value to 1</i></br>
+	<i>No effect on rendering time</i>
+	</p>
+	
+	<p>
+	<b title="This is the minimum fraction of reflection or transmission, under which no specular sampling is performed. A value of zero means that highlights will always be sampled by tracing reflected or transmitted rays. A value of one means that specular sampling is never used. Highlights from light sources will always be correct, but reflections from other surfaces will be approximated using an ambient value. A sampling threshold between zero and one offers a compromise between image accuracy and rendering time.">Specular Threshold</b> &nbsp;
+	<select id="-st">
+		<option></option>
+		<option value = 1>Min. (1)</option>
+		<option value = 0.85>Fast (0.85)</option>
+		<option value = 0.5>QUALITY = LOW (0.5)</option>
+		<option value = 0.15>Accurate (0.15)</option>
+		<option value = 0.1>QUALITY = MEDIUM (0.1)</option>
+		<option value = 0.01>QUALITY = HIGH (0.01)</option>
+		<option value = 0>Max. (0)*</option>
+	</select>*Max. value disables optimization</br>
+	Controlled by QUALITY.</br>
+	<i>If some specular highlights are missing, decrease value to 0.02</i></br>
+	<i>Value of 0 may increase rendering time by 50% over value of 1</i>
+	</p>
+	
+	<p>
+	<b title="This is the maximum number of diffuse bounces computed by the indirect calculation. A value of zero implies no indirect calculation.">Ambient Bounces</b> &nbsp;
+	<select id="-ab">
+		<option></option>
+		<option value = 0>Min. (0)</option>
+		<option value = 0>Fast (0)</option>
+		<option value = 1>QUALITY = HIGH (1)</option>
+		<option value = 2>Accurate (2)</option>
+		<option value = 5>Daylighting (5)</option>
+		<option value = 8>Max. (8)</option>
+	</select></br>
+	Controlled by QUALITY</br>
+	<i>If lighting in shadows is too flat, increment value</i></br>
+	<i>Doubling value can double render time</i>
+	</p>
+	
+	<p>
+	<b title="This value will approximately equal the error from indirect illuminance interpolation. A value of zero implies no interpolation.">Ambient Accuracy</b> &nbsp;
+	<select id="-aa">
+		<option></option>
+		<option value = 0.5>Min (0.5)</option>
+		<option value = 0.2>Fast (0.2)</option>
+		<option value = 0.15>Accurate (0.15)</option>
+		<option value = 0.08>Daylighting (0.08)</option>
+	</select></br>
+	Controlled by QUALITY and VARIABILITY (varies from 0.3 for low to 0.075 for high)</br>
+	<i>If uneven shading boundaries in shadows, decrease value by 25%</i></br>
+	<i>Doubling value approx. quadruples rendering time</i>
+	</p>
+	
+	<p>
+	<b title="This number will determine the maximum density of ambient values used in interpolation. Error will start to increase on surfaces spaced closer than the scene size divided by the ambient resolution. The maximum ambient value density is the scene size times the ambient accuracy (see the Ambient Accuracy option) divided by the ambient resolution. A value of zero is interpreted as unlimited resolution.">Ambient Resolution</b> &nbsp;
+	<select id="-ar">
+		<option></option>
+		<option value = 8>Min. (8)</option>
+		<option value = 32>Fast (32)</option>
+		<option value = 128>Accurate (128)</option>
+		<option value = 512>Daylighting (512)</option>
+	</select></br>
+	Controlled by DETAIL and QUALITY (varies from 26 for low to 426 for high)</br>
+	<i>If shading wrong in some areas, double or quadruple value</i></br>
+	<i>Doubling value can quadruple rendering time</i>
+	</p>
+	
+	<p>
+	<b title="The error in the Monte Carlo calculation of indirect illuminance will be inversely proportional to the square root of this number. A value of zero implies no indirect calculation.">Ambient Divisions</b> &nbsp;
+	<select id="-ad">
+		<option></option>
+		<option value = 0>Min. (0)</option>
+		<option value = 32>Fast (32)</option>
+		<option value = 512>Accurate (512)</option>
+		<option value = 2048>Daylighting (2048)</option>
+		<option value = 4096>Max. (4096)</option>
+	</select></br>
+	Controlled by QUALITY and VARIABILITY (varies from 256 for low to 4096 for high)</br>
+	<i>If "splotches" of light, double value</i></br>
+	<i>Doubling value may double rendering time</i>
+	</p>
+	
+	<p>
+	<b title="Super-samples are applied only to the ambient divisions which show a significant change.">Ambient Super-samples</b> &nbsp;
+	<select id="-as">
+		<option></option>
+		<option value = 0>Min. (0) QUALITY = LOW</option>
+		<option value = 32>Fast (32)</option>
+		<option value = 42>QUALITY = MEDIUM (42)</option>
+		<option value = 64>QUALITY = HIGH (64)</option>
+		<option value = 256>Accurate (256)</option>
+		<option value = 512>Daylighting (512)</option>
+		<option value = 1024>Max. (1024)</option>
+	</select></br>
+	Controlled by QUALITY.</br>
+	<i>If "splotches" of light, increase to half of Ambient Divisions value</i></br>
+	<i>Increasing value adds to Ambient Divisions parameter and its rendering time</i>
+	</p>
+	
+	<p>
+	<b title="Limits reflections to a maximum of number specified. If the number is 0, Limit Weight must be set to > 0.">Limit Reflection</b> &nbsp;
+	<select id="-lr">
+		<option></option>
+		<option value = 0>Min. (0)</option>
+		<option value = 4>Fast (4)</option>
+		<option value = 6>QUALITY = LOW (6)</option>
+		<option value = 8>Accurate (8) QUALITY = MEDIUM</option>
+		<option value = 12>QUALITY = HIGH (12)</option>
+		<option value = 16>Max. (16)</option>
+	</select></br>
+	Controlled by QUALITY.</br>
+	<i>If some multiple specular reflections gone, increment value</i></br>
+	<i>Minor impact to rendering time</i>
+	</p>
+	
+	<p>
+	<b title="During ray-tracing, a record is kept of the estimated contribution (weight) a ray would have in the image. If this weight is less than the specified minimum and the Limit Reflections setting is positive, the ray is not traced.">Limit Weight</b> &nbsp;
+	<select id="-lw">
+		<option></option>
+		<option value = 0.05>Min. (0.05)</option>
+		<option value = 0.01>Fast (0.01)</option>
+		<option value = 0.002>Accurate (0.002)</option>
+		<option value = 0>Max. (0)*</option>
+	</select>*(Max. value disables optimization)</br>
+	 </br>
+	<i>If some specular reflection gone, decrease value by 50%</i></br>
+	<i>Minor impact to rendering time</i>
+	</p>
+	
+	<p>
+	Medium Sampling Distance -ms is controlled by QUALITY.</br>
+	Set the medium sampling distance in world coordinate units. During source scattering, this will be the average distance between adjacent samples. A value of 0 means that only one sample will be taken per light source within a given scattering volume.</br>
+	Set to 0.30 for Medium and 0.15 for High.
+	</p>
+	
+	<p>
+	Specular sampling -ss is controlled by QUALITY.</br>
+	For values less than 1, this is the degree to which the highlights are sampled for rough specular materials. A value greater than one causes multiple ray samples to be sent to reduce noise at a commmesurate cost. A value of zero means that no jittering will take place, and all reflections will appear sharp even when they should be diffuse. </br>
+	Set to 0 for Low, 1 for Medium, and 16 for High.</br>
+	</p>
+</form>
+</body>
+</html>

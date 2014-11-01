@@ -1,0 +1,56 @@
+<html>
+<script>
+
+	function getGeoInfo(lat,lon) {
+		to_skp = 'skp:sendGeoInfo@refresh';
+		window.location.href = to_skp;
+		}
+		
+	function updateLocation(lat,lon,month,day,time) {
+		document.getElementById("lat_output").innerHTML = lat;
+		document.getElementById("lon_output").innerHTML = lon;
+		document.getElementById("month_output").innerHTML = month;
+		document.getElementById("day_output").innerHTML = day;
+		document.getElementById("time_output").innerHTML = time;
+	}
+	
+	function skySelected(someList) {
+		var list = document.getElementById(someList);
+		var selected = list.options[list.selectedIndex].value;
+		return selected;
+	}
+	
+	function outputGenSky() {
+		to_skp = 'skp:outputGenSky@' + skySelected("skyList");
+		window.location.href = to_skp;
+	}
+	
+</script>
+
+<body>
+	<form>
+		Select CIE sky:
+		<select id="skyList">
+			<option></option>
+			<option value = "-s" >CIE Standard Clear</option>
+			<option value = "-i" >CIE Intermediate</option>
+			<option value = "-c" >CIE Overcast</option>  
+			<option value = "+s" >Clear with sun</option>
+			<option value = "+i" >Intermediate with sun</option>
+			<option value = "-u" >Uniform cloudy</option>
+		</select>
+		<p>Current latitude: </p>
+		<p id="lat_output">-</p>
+		<p>Current longitude: </p>
+		<p id="lon_output">-</p>
+		<p>Current month: </p>
+		<p id="month_output">-</p>
+		<p>Current day: </p>
+		<p id="day_output">-</p>
+		<p>Current time: </p>
+		<p id="time_output">-</p>
+		<p><button type = "button" onclick = "getGeoInfo()">Get Solar Info</button>
+		<p><button type = "button" onclick = "outputGenSky()">Output GenSky File</button>
+	</form>
+</body>
+</html>
