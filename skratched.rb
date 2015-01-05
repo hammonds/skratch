@@ -3,28 +3,40 @@ require 'sketchup.rb'
 # delete this after debugging
 Sketchup.send_action "showRubyPanel:"
 
+# global variables
+$projectDirectory = "C:\\"
+
 #Add menu items
 #SKetchup and RAdiance Together Can Help Everyone Daylight!
 submenu = UI.menu("PlugIns").add_submenu("Skratched")
+submenu_view = submenu.add_submenu("Render View")
+submenu_grid = submenu.add_submenu("Render Grid")
 
-submenu.add_item("1. Assign generic material") {
+submenu.add_item("1. Set project directory") {
+	setProjectDirectory
+}
+submenu.add_item("2. Assign generic material") {
 	assignGenericMaterial
 	}
-submenu.add_item("2. Export Materials") {
+submenu.add_item("3. Export Materials") {
 	radmats
 }
-submenu.add_item("3. Export Geometry") {
+submenu.add_item("4. Export Geometry") {
 	radgeo
 	}
-submenu.add_item("4. Export Sky") {
+submenu.add_item("5. Export Sky") {
 	genSkyFromShadows
 	}
-submenu.add_item("5. Export View") {
+submenu.add_item("6. Export View") {
 	exportView
 	}
-submenu.add_item("6. Make RIF File") {
+submenu.add_item("7. Make RIF File") {
 	makeRIFfile
 	}
+	
+def setProjectDirectory
+	$projectDirectory = UI.select_directory(title: "Select Project Directory")
+end
 
 	
 #this method will find all faces without any assigned material and assign a default gray of 60% reflectance
@@ -49,7 +61,7 @@ def radmats
 	model = Sketchup.active_model
 	entities = model.entities
 	# edit this line to indicate where you want the .rad file to go
-	matsfile = UI.savepanel "Select directory", "c:\\", "materials.rad"
+	matsfile = UI.savepanel "Save Materials File", $projectDirectory, "materials.rad"
 	out_file = File.new(matsfile, 'w')
 	
 	# get materials - can't get materials from Materials class directly because you get a lot of junk materials
@@ -110,7 +122,7 @@ def radgeo
 	entities = model.entities
 	
 	# edit this line to indicate where you want the .rad file to go
-	geofile = UI.savepanel "Select directory", "c:\\", "geometry.rad"
+	geofile = UI.savepanel "Save Geometry", $projectDirectory, "geometry.rad"
 	out_file = File.new(geofile, 'w')
 	
 	f = 0
@@ -221,7 +233,7 @@ def genSkyFromShadows
 	
 	dialog.add_action_callback("outputGenSky") do |dlg, skyType|
 			puts "gensky " + month.to_s + " " + day.to_s + " " + time + " " + skyType + " -a " + latitude.to_s + " -o " + longitude.to_s
-			skyfile = UI.savepanel "Select directory", "c:\\", "sky.rad"
+			skyfile = UI.savepanel "Save Sky File", $projectDirectory, "sky.rad"
 			out_file = File.new(skyfile, 'w')
 			out_file.print("!gensky " + month.to_s + " " + day.to_s + " " + time + " " + skyType + " -a " + latitude.to_s + " -o " + longitude.to_s + "\n\n")
 			out_file.print("skyfunc glow sky_glow\n")
@@ -262,7 +274,7 @@ def exportView
 	puts viewPointY
 	puts viewPointZ
 	
-	viewfile = UI.savepanel "Select directory", "c:\\", "view.vp"
+	viewfile = UI.savepanel "Save View File", $projectDirectory, "view.vp"
 	out_file = File.new(viewfile, 'w')
 	out_file.print("rvu -vtv -vp #{viewPointX} #{viewPointY} #{viewPointZ} -vd #{viewDirectionX} #{viewDirectionY} #{viewDirectionZ} -vu 0 0 1 -vh 60 -vv 60 -vo 0 -va 0 -vs 0 -vl 0")
 	out_file.close
@@ -274,7 +286,7 @@ def makeRIFfile
 	
 	# add action callbacks
 	dialog.add_action_callback("sendingRIFInfo") do |dlg, param| 
-			riffile = UI.savepanel "Select directory","c:\\","render.rif"
+			riffile = UI.savepanel "Save RIF File", $projectDirectory,"render.rif"
 			out_file = File.new(riffile, 'w')
 			final = param.gsub("*","\n")
 			out_file.print(final)
