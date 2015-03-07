@@ -11,33 +11,33 @@ module SH_SKRATCHED
 	@projectDirectory = "C:\\"
 
 #Add menu items
-#SKetchup and RAdiance Together Can Help Everyone Daylight!
 	submenu = UI.menu("PlugIns").add_submenu("Skratched")
+	submenu_setup = submenu.add_submenu("Model Setup")
 	submenu_view = submenu.add_submenu("Render View")
 	submenu_grid = submenu.add_submenu("Render Grid")
 	
-	submenu.add_item("1. Set project directory") {
+	submenu_setup.add_item("1A. Set project directory") {
 		self.setProjectDirectory
 	}
-	submenu.add_item("2. Assign generic material") {
+	submenu_setup.add_item("1B. Assign generic material") {
 		self.assignGenericMaterial
 		}
-	submenu.add_item("3. Check normals") {
+	submenu_setup.add_item("1C. Check normals") {
 		self.checkNormals
 		}
-	submenu.add_item("3. Export Materials") {
+	submenu_setup.add_item("1D. Export Materials") {
 		self.radmats
 	}
-	submenu.add_item("4. Export Geometry") {
+	submenu_setup.add_item("1E. Export Geometry") {
 		self.radgeo
 		}
-	submenu.add_item("5. Export Sky") {
+	submenu_setup.add_item("1F. Export Sky") {
 		self.genSkyFromShadows
 		}
-	submenu.add_item("6. Export View") {
+	submenu_view.add_item("2A. Export View") {
 		self.exportView
 		}
-	submenu.add_item("7. Make RIF File") {
+	submenu_view.add_item("2B. Make RIF File") {
 		self.makeRIFfile
 		}
 		
