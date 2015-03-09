@@ -11,33 +11,32 @@ module SH_SKRATCHED
 	@projectDirectory = "C:\\"
 
 #Add menu items
-	submenu = UI.menu("PlugIns").add_submenu("Skratched")
+	submenu = UI.menu("PlugIns").add_submenu("Skratch")
 	submenu_setup = submenu.add_submenu("Model Setup")
-	submenu_view = submenu.add_submenu("Render View")
-	submenu_grid = submenu.add_submenu("Render Grid")
+	submenu_export = submenu.add_submenu("Export Files")
 	
-	submenu_setup.add_item("1A. Set project directory") {
+	submenu_setup.add_item("Set project directory") {
 		self.setProjectDirectory
 	}
-	submenu_setup.add_item("1B. Assign generic material") {
+	submenu_setup.add_item("Assign generic material") {
 		self.assignGenericMaterial
 		}
-	submenu_setup.add_item("1C. Check normals") {
+	submenu_setup.add_item("Check normals") {
 		self.checkNormals
 		}
-	submenu_setup.add_item("1D. Export Materials") {
+	submenu_export.add_item("Export Materials") {
 		self.radmats
 	}
-	submenu_setup.add_item("1E. Export Geometry") {
+	submenu_export.add_item("Export Geometry") {
 		self.radgeo
 		}
-	submenu_setup.add_item("1F. Export Sky") {
+	submenu_export.add_item("Export Sky") {
 		self.genSkyFromShadows
 		}
-	submenu_view.add_item("2A. Export View") {
+	submenu_export.add_item("Export View") {
 		self.exportView
 		}
-	submenu_view.add_item("2B. Make RIF File") {
+	submenu_export.add_item("Make RIF File") {
 		self.makeRIFfile
 		}
 		
@@ -271,7 +270,7 @@ module SH_SKRATCHED
 	end
 	
 	# find and show dialog
-		html_path = Sketchup.find_support_file "genSky.html" , "Plugins\\skratched\\"
+		html_path = Sketchup.find_support_file "genSky.html" , "Plugins\\skratch\\"
 		dialog.set_file(html_path)
 		dialog.show
 		
@@ -331,7 +330,7 @@ module SH_SKRATCHED
 			
 	
 	# find and show dialog
-		html_path = Sketchup.find_support_file "makerif.html" , "Plugins\\skratched\\"
+		html_path = Sketchup.find_support_file "makerif.html" , "Plugins\\skratch\\"
 		dialog.set_file(html_path)
 		dialog.show
 	
